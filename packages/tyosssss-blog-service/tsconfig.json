@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "es6",
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "./dist",
+    /* Strict Type-Checking Options */
+    "strict": false,
+    "noImplicitAny": false
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["views", "public", "pm2", "bin", "configs", "dist"]
+}
