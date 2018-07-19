@@ -2,6 +2,17 @@ import baseConfig from "./config.base";
 import developmentConfig from "./config.development";
 import productionConfig from "./config.production";
 
+interface MongoDBConfig {
+  connectionString: string;
+}
+
+interface Config {
+  isDev: boolean;
+  isProd: boolean;
+  env: string;
+  mongodb: MongoDBConfig;
+}
+
 enum Environment {
   dev = "development",
   prod = "production"
@@ -9,7 +20,7 @@ enum Environment {
 
 const env: Environment = <Environment>process.env.NODE_ENV || Environment.dev;
 
-const config = Object.assign(
+const config: Config = Object.assign(
   {
     isDev: env !== Environment.prod,
     isProd: env === Environment.prod,
@@ -19,4 +30,4 @@ const config = Object.assign(
   env === Environment.prod ? productionConfig : developmentConfig
 );
 
-export default { ...config };
+export default config;

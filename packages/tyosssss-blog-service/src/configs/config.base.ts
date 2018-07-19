@@ -1,5 +1,5 @@
 export default {
-  mongod: {
-    connectString: "mongodb://localhost"
+  mongodb: {
+    connectionString: "mongodb://localhost"
   }
 };
