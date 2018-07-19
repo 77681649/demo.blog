@@ -1,3 +1,4 @@
 import connectDatabase from "./connect-database";
+import * as model from "./models";
 
-export { connectDatabase };
+export { connectDatabase, model };

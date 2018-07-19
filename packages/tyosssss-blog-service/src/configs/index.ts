@@ -6,14 +6,14 @@ interface MongoDBConfig {
   connectionString: string;
 }
 
-interface Config {
+export interface Config {
   isDev: boolean;
   isProd: boolean;
   env: string;
   mongodb: MongoDBConfig;
 }
 
-enum Environment {
+export enum Environment {
   dev = "development",
   prod = "production"
 }
