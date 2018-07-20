@@ -32,6 +32,38 @@ router.post("/", function(req: Request, res: Response) {
 });
 
 /**
+ * 新增tags
+ */
+router.post("/:id/tag", function(req: Request, res: Response) {
+  const id = req.params.id || "";
+  const tags = req.body.tags;
+
+  try {
+    ArticleModel.addTags(id, tags).then(article =>
+      respondSuccess(res, { id: article.id })
+    );
+  } catch (err) {
+    respondError(res, err);
+  }
+});
+
+/**
+ * 删除tags
+ */
+router.delete("/:id/tag", function(req: Request, res: Response) {
+  const id = req.params.id || "";
+  const tags = req.body.tags;
+
+  try {
+    ArticleModel.removeTags(id, tags).then(article =>
+      respondSuccess(res, { id: article.id })
+    );
+  } catch (err) {
+    respondError(res, err);
+  }
+});
+
+/**
  * 获得文章
  */
 router.get("/:id", function(req: Request, res: Response) {

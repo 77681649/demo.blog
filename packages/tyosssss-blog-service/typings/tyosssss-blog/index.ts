@@ -57,7 +57,7 @@ export namespace blog {
       updateAt?: Date;
     }
 
-    export interface Articile extends Base {
+    export interface Article extends Base {
       /**
        * id
        */
@@ -91,7 +91,7 @@ export namespace blog {
     /**
      * 文章 Document
      */
-    export type ArticleDocument = BaseDocument & entity.Articile;
+    export type ArticleDocument = BaseDocument & entity.Article;
 
     /**
      * base 文档

@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema, Model } from "mongoose";
 import { updateTimeHelper } from "./helpers";
 import { blog } from "../../../typings/tyosssss-blog";
 

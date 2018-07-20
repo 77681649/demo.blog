@@ -2,6 +2,7 @@ import { Response } from "express";
 import { blog } from "../../../typings/tyosssss-blog";
 
 export const RESP_CODE_SUCCESS: number = 0;
+export const RESP_CODE_SERVER_ERROR: number = 500;
 
 export function respondSuccess(res: Response, data?: any) {
   res.status(200);
@@ -11,7 +12,11 @@ export function respondSuccess(res: Response, data?: any) {
 
 export function respondError(res: Response, err: Error) {
   res.status(200);
-  res.send(createAPIResponse(RESP_CODE_SUCCESS, err.message || ""));
+  res.send(
+    createAPIResponse(RESP_CODE_SERVER_ERROR, err.message || "", {
+      stack: err.stack || null
+    })
+  );
   res.end();
 }
 
