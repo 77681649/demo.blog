@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=development ts-node-dev --ignore=tyosssss-blog-service/node_modules,logs --respawn --transpileOnly --inspect=5858 bin/www",
-    "compile":"tsc"
+    "compile": "tsc"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",

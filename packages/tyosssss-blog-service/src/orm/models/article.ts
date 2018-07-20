@@ -18,12 +18,12 @@ export default class ArticleModel {
    */
   static save(article: any): Promise<ArticleDocument> {
     let doc: ArticleDocument = new Model(article);
-debugger
+    debugger;
     if (doc.id) {
       doc.isNew = false;
     }
 
-    return doc.save().catch(err => {
+    return doc.save().catch((err: Error) => {
       Logger.debug("article save error: ", err.message);
       throw err;
     });

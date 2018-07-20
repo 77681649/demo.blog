@@ -44,14 +44,20 @@ export namespace blog {
     }
   }
 
-  /**
-   * Document
-   */
-  export namespace document {
-    /**
-     * 文章 Document
-     */
-    export interface ArticleDocument extends BaseDocument {
+  export namespace entity {
+    export interface Base {
+      /**
+       * 创建时间
+       */
+      createAt?: Date;
+
+      /**
+       * 修改时间
+       */
+      updateAt?: Date;
+    }
+
+    export interface Articile extends Base {
       /**
        * id
        */
@@ -77,21 +83,20 @@ export namespace blog {
        */
       hidden?: boolean;
     }
+  }
+  /**
+   * Document
+   */
+  export namespace document {
+    /**
+     * 文章 Document
+     */
+    export type ArticleDocument = BaseDocument & entity.Articile;
 
     /**
      * base 文档
      */
-    export interface BaseDocument extends Document {
-      /**
-       * 创建时间
-       */
-      createAt?: Date;
-
-      /**
-       * 修改时间
-       */
-      updateAt?: Date;
-    }
+    export type BaseDocument = Document & entity.Base;
   }
 
   export namespace error {
