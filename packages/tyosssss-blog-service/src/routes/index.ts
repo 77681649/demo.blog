@@ -1,9 +1,11 @@
-var express = require('express');
-var router = express.Router();
+import { Application } from "express";
+import configs from "../configs";
+import { routerPath, router } from "./article";
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express Title' });
-});
+const API_PREFIX = configs.apiPrefix;
+const genPath = (prefix: string): string => API_PREFIX + prefix;
 
-module.exports = router;
+export function injectRoutes(app: Application) {
+  console.log(genPath(routerPath));
+  app.use(genPath(routerPath), router);
+}

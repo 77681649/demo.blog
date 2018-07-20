@@ -1,5 +1,6 @@
-import { Schema, Document } from "mongoose";
+import { Schema } from "mongoose";
 import { updateTimeHelper } from "./helpers";
+import { blog } from "../../../typings/tyosssss-blog";
 
 const ArticleSchema = new Schema(
   {
@@ -105,22 +106,10 @@ ArticleSchema.index({
   "meta.pv": -1
 });
 
-ArticleSchema.pre<ArticleDocument>("save", function(next) {
+ArticleSchema.pre<blog.document.ArticleDocument>("save", function(next) {
   updateTimeHelper(this);
   next();
 });
-
-/**
- * 文章 Document
- */
-export interface ArticleDocument extends Document {
-  title: string;
-  content?: string;
-  tags?: string[];
-  hidden?: boolean;
-  createAt?: Date;
-  updateAt?: Date;
-}
 
 /**
  * 按赞的数量排序

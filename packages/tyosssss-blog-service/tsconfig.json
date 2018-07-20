@@ -6,9 +6,13 @@
     "sourceMap": true,
     "outDir": "./dist",
     /* Strict Type-Checking Options */
+    
     "strict": false,
-    "noImplicitAny": false
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "typeRoots": ["./node_modules/@types", "./typings"],
+    // "traceResolution": true
   },
-  "include": ["./src/**/*"],
-  "exclude": ["views", "public", "pm2", "bin", "configs", "dist"]
+  "include": ["./src/**/*","./src/node_modules/**/*"],
+  "exclude": ["views", "public", "pm2", "bin", "configs", "dist","logs"]
 }
