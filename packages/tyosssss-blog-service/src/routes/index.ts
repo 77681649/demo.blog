@@ -1,11 +1,11 @@
 import { Application } from "express";
 import configs from "../configs";
-import { routerPath, router } from "./article";
+import articleRouter from "./article";
+import userRouter from "./user";
 
 const API_PREFIX = configs.apiPrefix;
-const genPath = (prefix: string): string => API_PREFIX + prefix;
 
 export function injectRoutes(app: Application) {
-  console.log(genPath(routerPath));
-  app.use(genPath(routerPath), router);
+  app.use(API_PREFIX, articleRouter);
+  app.use(API_PREFIX, userRouter);
 }

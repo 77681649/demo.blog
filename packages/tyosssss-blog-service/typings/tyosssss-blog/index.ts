@@ -19,6 +19,29 @@ export namespace blog {
     data: any;
   }
 
+  export enum ArticleListSortKey {
+    time = "updateAt",
+    pv = "meta.pv",
+    favour = "meta.favour"
+  }
+
+  export enum SortDirection {
+    asc = "asc",
+    desc = "desc"
+  }
+
+  export interface PaggerParam {
+    page_index: number;
+    page_size: number;
+  }
+
+  export interface ArticleListRequestParams extends PaggerParam {
+    category?: string;
+    tags?: string[];
+    sort_key: ArticleListSortKey;
+    sort_dir: SortDirection;
+  }
+
   /**
    * common
    */
@@ -64,6 +87,11 @@ export namespace blog {
       id?: string;
 
       /**
+       * 分类
+       */
+      category?: string;
+
+      /**
        * 文章标题
        */
       title?: string;
@@ -72,6 +100,11 @@ export namespace blog {
        * 文章正文
        */
       content?: string;
+
+      /**
+       * 文章路径
+       */
+      path?: string;
 
       /**
        * 文章标签

@@ -5,6 +5,14 @@ import { blog } from "../../../typings/tyosssss-blog";
 const ArticleSchema = new Schema(
   {
     /**
+     * 文章分类
+     */
+    category: {
+      type: String,
+      trim: true,
+      required: true
+    },
+    /**
      * 文章标题
      */
     title: {
@@ -16,6 +24,12 @@ const ArticleSchema = new Schema(
      * 文章正文
      */
     content: {
+      type: String
+    },
+    /**
+     * 文章路径
+     */
+    path: {
       type: String
     },
     /**
@@ -59,7 +73,7 @@ const ArticleSchema = new Schema(
       /**
        * 赞的数据量
        */
-      favours: Number
+      favour: Number
     }
   },
   {
@@ -79,7 +93,8 @@ ArticleSchema.index({
  * 按标题搜索
  */
 ArticleSchema.index({
-  updateAt: -1,
+  category: 1,
+  updateAt: 1,
   title: 1
 });
 
@@ -88,7 +103,7 @@ ArticleSchema.index({
  */
 ArticleSchema.index({
   tags: 1,
-  createAt: -1,
+  updateAt: -1,
   title: 1
 });
 
@@ -96,14 +111,16 @@ ArticleSchema.index({
  * 按赞的数量排序
  */
 ArticleSchema.index({
-  "meta.favours": -1
+  "meta.favour": -1,
+  title: 1
 });
 
 /**
  * 按阅读数排序
  */
 ArticleSchema.index({
-  "meta.pv": -1
+  "meta.pv": -1,
+  title: 1
 });
 
 ArticleSchema.pre<blog.document.ArticleDocument>("save", function(next) {

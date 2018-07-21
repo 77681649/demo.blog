@@ -1,45 +1,66 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { respondSuccess, respondError } from "./helpers/respond-helper";
 import { ArticleModel } from "../orm/models";
+import { blog } from "../../typings/tyosssss-blog";
 
-const routerPath = "/article";
 const router: Router = Router();
 
 /**
  * 获得文章列表
  */
-router.get("/", function(req: Request, res: Response) {
-  respondSuccess(res, {
-    total: 100,
-    articles: [
-      {
-        id: 1,
-        title: "hahah",
-        content: "haha",
-        tags: ["tag"]
-      }
-    ]
-  });
+router.get("/articles", function(req: Request, res: Response) {
+  console.log(req.session);
+  let query = req.query;
+  let params: blog.ArticleListRequestParams = {
+    category: query.category,
+    tags: query.tags ? query.tags.split(",") : [],
+    sort_key: query.sort_key,
+    sort_dir: query.sort_dir,
+    page_index: query.page_index,
+    page_size: query.page_size
+  };
+
+  try {
+    ArticleModel.getList(params).then(article => respondSuccess(res, article));
+  } catch (err) {
+    respondError(res, err);
+  }
+});
+
+/**
+ * 获得文章
+ */
+router.get("/article/:id", function(req: Request, res: Response) {
+  let id = req.params.id;
+
+  try {
+    ArticleModel.get(id).then(article => respondSuccess(res, article));
+  } catch (err) {
+    respondError(res, err);
+  }
 });
 
 /**
  * 新增或更新文章
  */
-router.post("/", function(req: Request, res: Response) {
-  ArticleModel.save(req.body)
-    .then(article => respondSuccess(res, { id: article.id }))
-    .catch(err => respondError(res, err));
+router.post("/article", function(req: Request, res: Response) {
+  try {
+    ArticleModel.save(req.body).then(article =>
+      respondSuccess(res, { id: article.id })
+    );
+  } catch (err) {
+    respondError(res, err);
+  }
 });
 
 /**
  * 新增tags
  */
-router.post("/:id/tag", function(req: Request, res: Response) {
+router.post("/article/:id/pv", function(req: Request, res: Response) {
   const id = req.params.id || "";
-  const tags = req.body.tags;
 
   try {
-    ArticleModel.addTags(id, tags).then(article =>
+    ArticleModel.incrementPV(id).then(article =>
       respondSuccess(res, { id: article.id })
     );
   } catch (err) {
@@ -50,7 +71,7 @@ router.post("/:id/tag", function(req: Request, res: Response) {
 /**
  * 删除tags
  */
-router.delete("/:id/tag", function(req: Request, res: Response) {
+router.delete("/article/:id/tag", function(req: Request, res: Response) {
   const id = req.params.id || "";
   const tags = req.body.tags;
 
@@ -63,16 +84,4 @@ router.delete("/:id/tag", function(req: Request, res: Response) {
   }
 });
 
-/**
- * 获得文章
- */
-router.get("/:id", function(req: Request, res: Response) {
-  respondSuccess(res, {
-    id: 1,
-    title: "hahah",
-    content: "haha",
-    tags: ["tag"]
-  });
-});
-
-export { routerPath, router };
+export default router;

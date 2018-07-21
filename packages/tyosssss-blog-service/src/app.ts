@@ -2,27 +2,38 @@ import * as path from "path";
 import * as createError from "http-errors";
 import * as express from "express";
 import { Request, Response, NextFunction } from "express";
+import * as expressSession from "express-session";
 import * as cookieParser from "cookie-parser";
 import * as logger from "morgan";
 
 import { injectRoutes } from "./routes";
 import { connectDatabase } from "./orm";
-import Logger from 'logger'
-
+import Logger from "logger";
 
 connectDatabase();
-
 
 var app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "..", "views"));
 app.set("view engine", "ejs");
+app.set("trust proxy", 1);
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(
+  expressSession({
+    secret: "tyosssss.blog",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: false,
+      maxAge: 30 * 60 * 60 * 1000
+    }
+  })
+);
 app.use(express.static(path.join(__dirname, "public")));
 
 injectRoutes(app);
