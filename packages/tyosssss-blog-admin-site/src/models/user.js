@@ -1,5 +1,4 @@
 import { getLoginStatus, login } from "../services/user";
-import { delay } from "dva/saga";
 import { goHome, goLogin } from "../utils/history";
 
 export default {

@@ -3,6 +3,7 @@ import { connect } from "dva";
 import { Layout } from "antd";
 import { Alert, Table, Icon, Input, Button, Divider, Tag } from "antd";
 import styles from "./IndexPage.css";
+import ArticileDialog from "../components/ArticleDialog";
 
 const tagColors = [
   "magenta",
@@ -89,6 +90,7 @@ function IndexPage() {
             ]}
           />
         </div>
+        <ArticileDialog />
       </Layout.Content>
     </Layout>
   );
