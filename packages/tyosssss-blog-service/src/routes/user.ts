@@ -6,7 +6,8 @@ const router: Router = Router();
 
 router.get("/user/status", function(req: Request, res: Response) {
   respondSuccess(res, {
-    logined: !!req.session.user
+    logined: !!req.session.user,
+    uesrname: req.session.username
   });
 });
 
