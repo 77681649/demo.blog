@@ -7,7 +7,7 @@ export const RESP_CODE_SERVER_ERROR: number = 500;
 export function respondSuccess(res: Response, data?: any) {
   res.status(200);
   res.send(createAPIResponse(RESP_CODE_SUCCESS, "", data));
-  res.end();
+  // res.end();
 }
 
 export function respondError(res: Response, err: Error) {

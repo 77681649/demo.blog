@@ -5,10 +5,13 @@ import { Request, Response, NextFunction } from "express";
 import * as expressSession from "express-session";
 import * as cookieParser from "cookie-parser";
 import * as logger from "morgan";
+import * as fileUpload from "express-fileupload";
 
 import { injectRoutes } from "./routes";
 import { connectDatabase } from "./orm";
 import Logger from "logger";
+
+const corser = require("corser");
 
 connectDatabase();
 
@@ -34,16 +37,38 @@ app.use(
     }
   })
 );
-console.log(path.join(__dirname, "../public"));
-app.use(express.static(path.join(__dirname, "../public")));
+const corserRequestListener = corser.create({
+  origins: "*",
+  endPreflightRequests: true,
+  methods: ["GET", "PUT", "POST", "DELETE"],
+  requestHeaders: ["Content-Type", "X-Requested-With"]
+});
 
-app.use(function allowCrossDomain(req, res, next) {
+app.use(function corserRequestListener(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.header("Access-Control-Allow-Headers", "Content-Type,X-Requested-With");
 
-  next();
+  if (req.method === "OPTIONS") {
+    // End CORS preflight request.
+
+    res.writeHead(204);
+    res.end();
+  } else {
+    // Implement other HTTP methods.
+    next();
+  }
 });
+app.use(fileUpload());
+app.use(express.static(path.join(__dirname, "../public")));
+
+// app.use(function allowCrossDomain(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+//   res.header("Access-Control-Allow-Headers", "Content-Type,X-Requested-With");
+
+//   next();
+// });
 
 injectRoutes(app);
 // app.use("/users", usersRouter);

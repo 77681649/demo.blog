@@ -6,7 +6,7 @@ export default {
 
   state: {
     data: null,
-    pageSize: 1,
+    pageSize: 20,
     err: null
   },
 

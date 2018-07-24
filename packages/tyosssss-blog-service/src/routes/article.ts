@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import { respondSuccess, respondError } from "./helpers/respond-helper";
 import { ArticleModel } from "../orm/models";
 import { blog } from "../../typings/tyosssss-blog";
+import * as path from "path";
 
 const router: Router = Router();
 
@@ -79,6 +80,39 @@ router.delete("/article/:id/tag", function(req: Request, res: Response) {
     ArticleModel.removeTags(id, tags).then(article =>
       respondSuccess(res, { id: article.id })
     );
+  } catch (err) {
+    respondError(res, err);
+  }
+});
+
+const updateRootDir = path.join(__dirname, "../../public/upload/articles");
+/**
+ * 上传文件
+ */
+router.post("/article/file", function(req: Request, res: Response) {
+  debugger;
+  try {
+    if (!req.files) respondError(res, new Error("No files were uploaded."));
+
+    const file = req.files.file;
+    const extensions = file.name.substr(file.name.indexOf("."));
+    const filename = file.md5 + extensions;
+
+    if (file.data.length > 1 * 1024 * 1024) {
+      respondError(res, new Error("The files size muse be < 1MB"));
+    }
+
+    console.log(file);
+    console.log(updateRootDir);
+    console.log(filename);
+
+    // Use the mv() method to place the file somewhere on your server
+    file.mv(path.join(updateRootDir, filename), function(err: Error) {
+      if (err) respondError(res, err);
+      else respondSuccess(res, { filename });
+    });
+
+    // );
   } catch (err) {
     respondError(res, err);
   }
