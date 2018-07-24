@@ -1,11 +1,14 @@
 import { getLoginStatus, login } from "../services/user";
 import { goHome, goLogin } from "../utils/history";
-import { effects } from "dva/saga";
 
 export default {
-  namespace: "article",
+  namespace: "page",
 
-  state: null,
+  state: {
+    index: {
+      showArticleDialog: false
+    }
+  },
 
   subscriptions: {
     setup({ dispatch, history }) {
@@ -22,7 +25,11 @@ export default {
 
   reducers: {
     show_article_dialog(state, action) {
-      return action.article;
+      return { ...state, index: { ...state.index, showArticleDialog: true } };
+    },
+
+    hidden_article_dialog(state, action) {
+      return { ...state, index: { ...state.index, showArticleDialog: false } };
     }
   }
 };
