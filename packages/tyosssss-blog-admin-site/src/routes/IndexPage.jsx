@@ -6,6 +6,12 @@ import styles from "./IndexPage.css";
 import ArticleDialog from "../components/ArticleDialog";
 import { debug } from "util";
 
+const categories = [
+  { id: "1", name: "Web" },
+  { id: "2", name: "iOS" },
+  { id: "3", name: "Java" }
+];
+
 const tagColors = [
   "magenta",
   "red",
@@ -43,7 +49,11 @@ class IndexPage extends React.Component {
           <div>
             <h4>文章列表</h4>
             <div>
-              <Button type="primary" ghost onClick={() => props.showArticle()}>
+              <Button
+                type="primary"
+                ghost
+                onClick={() => props.showArticle(null)}
+              >
                 新增文章4
               </Button>
             </div>
@@ -51,7 +61,15 @@ class IndexPage extends React.Component {
           <div>
             <Table
               rowKey="_id"
-              dataSource={props.articles}
+              dataSource={
+                props.articles
+                  ? props.articles.map(a => {
+                      let category = categories.find(c => c.id == a.category);
+                      a.category = category ? category.name : "";
+                      return a;
+                    })
+                  : null
+              }
               pagination={{
                 pageSize: props.pageSize,
                 pageIndex: this.state.pageIndex,
@@ -104,7 +122,7 @@ class IndexPage extends React.Component {
                     <span>
                       <a
                         href="javascript:void 666;"
-                        onClick={() => props.showArticle()}
+                        onClick={() => props.showArticle(record)}
                       >
                         编辑
                       </a>
@@ -148,7 +166,7 @@ export default connect(
       dispatch({ type: "articles/fetch", payload: { pageIndex } });
     },
     showArticle: article => {
-      dispatch({ type: "article/show_article_dialog", article: null });
+      dispatch({ type: "article/show_article_dialog", article: article });
       dispatch({ type: "page/show_article_dialog" });
     }
   })

@@ -89,4 +89,12 @@ app.use(function(err: any, req: Request, res: Response, next: NextFunction) {
   res.render("error");
 });
 
+process.on("uncaughtException", function(e) {
+  Logger.fatal("uncaughtException", e);
+});
+
+process.on("unhandledRejection", function(e) {
+  Logger.fatal("unhandledRejection", e);
+});
+
 module.exports = app;

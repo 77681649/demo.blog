@@ -109,7 +109,8 @@ export namespace blog {
       /**
        * 文章标签
        */
-      tags?: string[];
+
+      tags?: string[] | string;
 
       /**
        * 是否隐藏

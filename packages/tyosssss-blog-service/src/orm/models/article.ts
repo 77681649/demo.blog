@@ -67,22 +67,30 @@ export default class ArticleModel extends Model {
   /**
    * 获得指定id的文章
    */
-  static get(id: string): Promise<ArticleDocument> {
+  static get(id: string): Promise<Article> {
     Logger.debug("get id", id);
 
     if (!id) {
       throw new Error('The "article-id" param is null');
     }
 
-    return this.findById(id).exec();
+    return this.findById(id)
+      .exec()
+      .then(({ _id, title, category, hidden, tags, path, meta }) => ({
+        id: _id,
+        category,
+        title,
+        hidden,
+        tags,
+        path,
+        meta
+      }));
   }
 
   /**
    * 获得指定id的文章
    */
-  static getList(
-    params: blog.ArticleListRequestParams
-  ): Promise<ArticleDocument[]> {
+  static getList(params: blog.ArticleListRequestParams): Promise<Article[]> {
     Logger.debug("get list params:", params);
 
     let { tags, category, sort_key, sort_dir, page_index, page_size } = params;
@@ -121,7 +129,20 @@ export default class ArticleModel extends Model {
       .sort(sort)
       .skip(skip)
       .limit(limit)
-      .exec();
+      .exec()
+      .then(docs =>
+        docs
+          .map(doc => doc.toJSON())
+          .map(({ _id, category, title, hidden, tags, path, meta }) => ({
+            id: _id,
+            category,
+            title,
+            hidden,
+            tags,
+            path,
+            meta
+          }))
+      );
   }
 
   /**
@@ -220,7 +241,7 @@ export default class ArticleModel extends Model {
     let $set: Article = {};
 
     if (doc.category) {
-      $set.category = doc.category.trim();
+      $set.category = doc.category;
     }
 
     if (doc.title) {
@@ -235,8 +256,8 @@ export default class ArticleModel extends Model {
       $set.path = doc.path.trim();
     }
 
-    if (doc.tags && doc.tags.length) {
-      $set.tags = doc.tags.map(tag => tag.toLowerCase());
+    if (doc.tags) {
+      $set.tags = doc.tags.split(",").map(tag => tag.toLowerCase());
     }
 
     if (doc.hidden) {
